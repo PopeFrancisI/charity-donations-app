@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.views import View
+from django.db.models import Sum
 
 from donations.models import Donation
 
@@ -8,8 +9,8 @@ class LandingPage(View):
 
     @staticmethod
     def count_bags():
-        bags_count = Donation.objects.all().aggregate(sum('quantity'))
-        return bags_count
+        bags_count = Donation.objects.all().aggregate(Sum('quantity'))
+        return bags_count['quantity__sum']
 
     @staticmethod
     def count_supported_institutions():
