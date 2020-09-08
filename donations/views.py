@@ -9,7 +9,7 @@ class LandingPage(View):
 
     @staticmethod
     def count_bags():
-        bags_count = Donation.objects.all().aggregate(Sum('quantity'))
+        bags_count = Donation.objects.aggregate(Sum('quantity'))
         return bags_count['quantity__sum']
 
     @staticmethod
