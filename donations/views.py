@@ -11,10 +11,15 @@ class LandingPage(View):
         bags_count = Donation.objects.all().aggregate(sum('quantity'))
         return bags_count
 
+    @staticmethod
+    def count_supported_organisations():
+        organisations_count = Donation.objects.distinct('institution').count()
+        return organisations_count
+
     def get(self, request):
         context = {}
         context['bags_count'] = self.count_bags()
-        context['supported_organisations_count'] = count_supported_organisations()
+        context['supported_organisations_count'] = self.count_supported_organisations()
 
         return render(request, 'index.html', context)
 
