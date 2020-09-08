@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.views import View
 from django.db.models import Sum
 
-from donations.models import Donation
+from donations.models import Donation, Institution
 
 
 class LandingPage(View):
@@ -17,10 +17,18 @@ class LandingPage(View):
         institutions_count = Donation.objects.distinct('institution').count()
         return institutions_count
 
+    @staticmethod
+    def get_institutions_of_type(type):
+        institutions = Institution.objects.filter(type=type)
+        return institutions
+
     def get(self, request):
         context = {}
         context['bags_count'] = self.count_bags()
         context['supported_institutions_count'] = self.count_supported_institutions()
+        context['charities'] = self.get_institutions_of_type('C')
+        context['ngos'] = self.get_institutions_of_type('NGO')
+        context['locals'] = self.get_institutions_of_type('L')
 
         return render(request, 'index.html', context)
 
