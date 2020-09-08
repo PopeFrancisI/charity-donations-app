@@ -28,7 +28,7 @@ class LandingPage(View):
         context['supported_institutions_count'] = self.count_supported_institutions()
         context['charities'] = self.get_institutions_of_type('C')
         context['ngos'] = self.get_institutions_of_type('NGO')
-        context['locals'] = self.get_institutions_of_type('L')
+        context['local_collections'] = self.get_institutions_of_type('L')
 
         return render(request, 'index.html', context)
 

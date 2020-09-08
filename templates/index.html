@@ -120,55 +120,26 @@
         <div class="help--slides" data-id="2">
             <p>
                 W naszej bazie znajdziesz listę zweryfikowanych organizacji pozarządowych, z którymi współpracujemy.
-                Możesz sprawdzić czym się zajmują, komu pomagają i czego potrzebują.
+                Możesz sprawdzić czym się zajmują i czego potrzebują.
             </p>
             <ul class="help--slides-items">
-                <li>
-                    <div class="col">
-                        <div class="title">Organizacja 1</div>
-                        <div class="subtitle">Lorem ipsum dolor sit amet consectetur.</div>
-                    </div>
+                {% for ngo in ngos %}
+                    <li>
+                        <div class="col">
+                            <div class="title">Organizacja "{{ ngo.name }}"</div>
+                            <div class="subtitle">Cel i misja: {{ ngo.description }}</div>
+                        </div>
 
-                    <div class="col">
-                        <div class="text">Lorem ipsum dolor sit amet consectetur adipisicing elit.</div>
-                    </div>
-                </li>
-
-                <li>
-                    <div class="col">
-                        <div class="title">Organizacja 2</div>
-                        <div class="subtitle">Lorem ipsum dolor sit amet consectetur.</div>
-                    </div>
-
-                    <div class="col">
-                        <div class="text">Lorem ipsum dolor sit amet consectetur adipisicing elit.</div>
-                    </div>
-                </li>
-
-                <li>
-                    <div class="col">
-                        <div class="title">Organizacja 3</div>
-                        <div class="subtitle">Lorem ipsum dolor sit amet consectetur.</div>
-                    </div>
-
-                    <div class="col">
-                        <div class="text">Lorem ipsum dolor sit amet consectetur adipisicing elit.</div>
-                    </div>
-                </li>
-
-                <li>
-                    <div class="col">
-                        <div class="title">Organizacja 4</div>
-                        <div class="subtitle">Lorem ipsum dolor sit amet consectetur.</div>
-                    </div>
-
-                    <div class="col">
-                        <div class="text">Lorem ipsum dolor sit amet consectetur adipisicing elit.</div>
-                    </div>
-                </li>
+                        <div class="col">
+                            <div class="text">
+                                {% for category in ngo.categories.all %}
+                                    {{ category.name }},
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </li>
+                {% endfor %}
             </ul>
-
-            <!-- Pagination
             <ul class="help--slides-pagination">
               <li><a href="#" class="btn btn--small btn--without-border active" data-page="1">1</a></li>
               <li><a href="#" class="btn btn--small btn--without-border" data-page="2">2</a></li>
@@ -176,43 +147,35 @@
               <li><a href="#" class="btn btn--small btn--without-border" data-page="4">4</a></li>
               <li><a href="#" class="btn btn--small btn--without-border" data-page="5">5</a></li>
             </ul>
-            -->
         </div>
 
         <!-- SLIDE 3 -->
         <div class="help--slides" data-id="3">
-            <p>Lorem ipsum dolor sit amet, his ocurreret persequeris ea, ad utinam laudem duo. Verterem adipisci
-                partiendo eos ne, ea his reque quaeque recteque, ne quo lobortis intellegam.</p>
+            <p>W naszej bazie znajdziesz listę zweryfikowanych zbiórek lokalnych.
+                Możesz sprawdzić czym jaki jest ich cel i jakie przedmioty podlegają zbiórce.
+            </p>
             <ul class="help--slides-items">
+                {% for local_collection in local_collections %}
                 <li>
                     <div class="col">
-                        <div class="title">Lokalna zbiórka 1</div>
-                        <div class="subtitle">Lorem ipsum dolor sit amet consectetur.</div>
+                        <div class="title">Zbiórka "{{ local_collection.name }}"</div>
+                        <div class="subtitle">Opis: {{ local_collection.description }}</div>
                     </div>
 
                     <div class="col">
-                        <div class="text">Lorem ipsum dolor sit amet consectetur adipisicing elit.</div>
+                        <div class="text">
+                            {% for category in local_collection.categories.all %}
+                                {{ category.name }},
+                            {% endfor %}
+                        </div>
                     </div>
                 </li>
-
-                <li>
-                    <div class="col">
-                        <div class="title">Lokalna zbiórka 2</div>
-                        <div class="subtitle">Lorem ipsum dolor sit amet consectetur.</div>
-                    </div>
-
-                    <div class="col">
-                        <div class="text">Lorem ipsum dolor sit amet consectetur adipisicing elit.</div>
-                    </div>
-                </li>
+                {% endfor %}
             </ul>
-
-            <!-- Pagination
             <ul class="help--slides-pagination">
               <li><a href="#" class="btn btn--small btn--without-border active" data-page="1">1</a></li>
               <li><a href="#" class="btn btn--small btn--without-border" data-page="2">2</a></li>
             </ul>
-            -->
         </div>
     </section>
 
