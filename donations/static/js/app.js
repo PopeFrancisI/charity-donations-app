@@ -62,8 +62,11 @@ document.addEventListener("DOMContentLoaded", function() {
     changePage(e) {
       e.preventDefault();
       const page = e.target.dataset.page;
-
-      console.log(page);
+      switch (this.currentSlide) {
+        case '1': $(".help--slides[data-id='1']").load('/?charities_page=' + page + '#help .help--slides[data-id=\'1\']'); break;
+        case '2': $(".help--slides[data-id='2']").load('/?ngos_page=' + page + '#help .help--slides[data-id=\'2\']'); break;
+        case '3': $(".help--slides[data-id='3']").load('/?local_collections_page=' + page + '#help .help--slides[data-id=\'3\']'); break;
+      }
     }
   }
   const helpSection = document.querySelector(".help");

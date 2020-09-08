@@ -80,9 +80,9 @@
         <h2>Komu pomagamy?</h2>
 
         <ul class="help--buttons">
-            <li data-id="1"><a href="#" class="btn btn--without-border active">Fundacjom</a></li>
-            <li data-id="2"><a href="#" class="btn btn--without-border">Organizacjom pozarządowym</a></li>
-            <li data-id="3"><a href="#" class="btn btn--without-border">Lokalnym zbiórkom</a></li>
+            <li data-id="1"><a href="#help" class="btn btn--without-border active">Fundacjom</a></li>
+            <li data-id="2"><a href="#help" class="btn btn--without-border">Organizacjom pozarządowym</a></li>
+            <li data-id="3"><a href="#help" class="btn btn--without-border">Lokalnym zbiórkom</a></li>
         </ul>
 
         <!-- SLIDE 1 -->
@@ -93,7 +93,7 @@
             </p>
 
             <ul class="help--slides-items">
-                {% for charity in charities %}
+                {% for charity in  charities_page %}
                     <li>
                         <div class="col">
                             <div class="title">Fundacja "{{ charity.name }}"</div>
@@ -109,9 +109,13 @@
                 {% endfor %}
             </ul>
             <ul class="help--slides-pagination">
-              <li><a href="#" class="btn btn--small btn--without-border active" data-page="1">1</a></li>
-              <li><a href="#" class="btn btn--small btn--without-border" data-page="2">2</a></li>
-              <li><a href="#" class="btn btn--small btn--without-border" data-page="3">3</a></li>
+                {% for i in charities_page_range %}
+                    {% if i == charities_page.number %}
+                        <li><a href="?charities_page={{ i }}#help" class="btn btn--small btn--without-border active" data-page="{{ i }}">{{ i }}</a></li>
+                    {% else %}
+                        <li><a href="?charities_page={{ i }}#help" class="btn btn--small btn--without-border" data-page="{{ i }}">{{ i }}</a></li>
+                    {% endif %}
+                {% endfor %}
             </ul>
         </div>
 
@@ -123,7 +127,7 @@
                 Możesz sprawdzić czym się zajmują i czego potrzebują.
             </p>
             <ul class="help--slides-items">
-                {% for ngo in ngos %}
+                {% for ngo in ngos_page %}
                     <li>
                         <div class="col">
                             <div class="title">Organizacja "{{ ngo.name }}"</div>
@@ -141,11 +145,13 @@
                 {% endfor %}
             </ul>
             <ul class="help--slides-pagination">
-              <li><a href="#" class="btn btn--small btn--without-border active" data-page="1">1</a></li>
-              <li><a href="#" class="btn btn--small btn--without-border" data-page="2">2</a></li>
-              <li><a href="#" class="btn btn--small btn--without-border" data-page="3">3</a></li>
-              <li><a href="#" class="btn btn--small btn--without-border" data-page="4">4</a></li>
-              <li><a href="#" class="btn btn--small btn--without-border" data-page="5">5</a></li>
+                {% for i in ngos_page_range %}
+                    {% if i == ngos_page.number %}
+                        <li><a href="?ngos_page={{ i }}#help" class="btn btn--small btn--without-border active" data-page="{{ i }}">{{ i }}</a></li>
+                    {% else %}
+                        <li><a href="?ngos_page={{ i }}#help" class="btn btn--small btn--without-border" data-page="{{ i }}">{{ i }}</a></li>
+                    {% endif %}
+                {% endfor %}
             </ul>
         </div>
 
@@ -155,7 +161,7 @@
                 Możesz sprawdzić czym jaki jest ich cel i jakie przedmioty podlegają zbiórce.
             </p>
             <ul class="help--slides-items">
-                {% for local_collection in local_collections %}
+                {% for local_collection in local_collections_page %}
                 <li>
                     <div class="col">
                         <div class="title">Zbiórka "{{ local_collection.name }}"</div>
@@ -173,8 +179,13 @@
                 {% endfor %}
             </ul>
             <ul class="help--slides-pagination">
-              <li><a href="#" class="btn btn--small btn--without-border active" data-page="1">1</a></li>
-              <li><a href="#" class="btn btn--small btn--without-border" data-page="2">2</a></li>
+                {% for i in local_collections_page_range %}
+                    {% if i == local_collections_page.number %}
+                        <li><a href="?local_collections_page={{ i }}#help" class="btn btn--small btn--without-border active" data-page="{{ i }}">{{ i }}</a></li>
+                    {% else %}
+                        <li><a href="?local_collections_page={{ i }}#help" class="btn btn--small btn--without-border" data-page="{{ i }}">{{ i }}</a></li>
+                    {% endif %}
+                {% endfor %}
             </ul>
         </div>
     </section>
