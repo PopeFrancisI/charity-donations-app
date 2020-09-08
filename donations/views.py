@@ -1,3 +1,4 @@
+from django.core.paginator import Paginator
 from django.shortcuts import render
 from django.views import View
 from django.db.models import Sum
@@ -22,13 +23,32 @@ class LandingPage(View):
         institutions = Institution.objects.filter(type=type)
         return institutions
 
+    def get_page_obj(self, queryset, page_name):
+        paginator = Paginator(queryset, 5)
+        page_number = self.request.GET.get(page_name)
+        page_obj = paginator.get_page(page_number)
+        return page_obj
+
     def get(self, request):
         context = {}
         context['bags_count'] = self.count_bags()
         context['supported_institutions_count'] = self.count_supported_institutions()
-        context['charities'] = self.get_institutions_of_type('C')
-        context['ngos'] = self.get_institutions_of_type('NGO')
-        context['local_collections'] = self.get_institutions_of_type('L')
+
+        charities_page_name = 'charities_page'
+        ngos_page_name = 'ngos_page'
+        local_collections_page_name = 'local_collections_page'
+
+        charities = self.get_institutions_of_type('C')
+        charities_page = self.get_page_obj(charities, charities_page_name)
+        context[charities_page_name] = charities_page
+
+        ngos = self.get_institutions_of_type('NGO')
+        ngos_page = self.get_page_obj(ngos, ngos_page_name)
+        context[ngos_page_name] = ngos_page
+
+        local_collections = self.get_institutions_of_type('L')
+        local_collections_page = self.get_page_obj(local_collections, local_collections_page_name)
+        context[local_collections_page_name] = local_collections_page
 
         return render(request, 'index.html', context)
 
