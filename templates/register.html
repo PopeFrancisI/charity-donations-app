@@ -6,20 +6,42 @@
         <h2>Załóż konto</h2>
         <form action="{% url 'register' %}" method="post">
             {% csrf_token %}
+{#            <div class="form-group">#}
+{#                <input type="text" name="name" placeholder="Imię"/>#}
+{#            </div>#}
+{#            <div class="form-group">#}
+{#                <input type="text" name="surname" placeholder="Nazwisko"/>#}
+{#            </div>#}
+{#            <div class="form-group">#}
+{#                <input type="email" name="email" placeholder="Email"/>#}
+{#            </div>#}
+{#            <div class="form-group">#}
+{#                <input type="password" name="password" placeholder="Hasło"/>#}
+{#            </div>#}
+{#            <div class="form-group">#}
+{#                <input type="password" name="password2" placeholder="Powtórz hasło"/>#}
+{#            </div>#}
+
+            {{ form.non_field_errors }}
             <div class="form-group">
-                <input type="text" name="name" placeholder="Imię"/>
+                {{ form.first_name.errors }}
+                {{ form.first_name }}
             </div>
             <div class="form-group">
-                <input type="text" name="surname" placeholder="Nazwisko"/>
+                {{ form.last_name.errors }}
+                {{ form.last_name }}
             </div>
             <div class="form-group">
-                <input type="email" name="email" placeholder="Email"/>
+                {{ form.email.errors }}
+                {{ form.email }}
             </div>
             <div class="form-group">
-                <input type="password" name="password" placeholder="Hasło"/>
+                {{ form.password1.errors }}
+                {{ form.password1 }}
             </div>
             <div class="form-group">
-                <input type="password" name="password2" placeholder="Powtórz hasło"/>
+                {{ form.password2.errors }}
+                {{ form.password2 }}
             </div>
 
             <div class="form-group form-group--buttons">
