@@ -1,3 +1,4 @@
+from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from django.core.paginator import Paginator
 from django.shortcuts import render, redirect
@@ -70,6 +71,17 @@ class Login(View):
 
     def get(self, request):
         return render(request, 'login.html')
+
+    def post(self, request):
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+
+        user = authenticate(username=email, password=password)
+        if user:
+            login(request, user)
+            return redirect(reverse('landing_page'))
+        else:
+            return redirect(reverse('register') + '#register')
 
 
 class Register(FormView):
