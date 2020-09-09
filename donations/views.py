@@ -1,8 +1,12 @@
+from django.contrib.auth.models import User
 from django.core.paginator import Paginator
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.urls import reverse, reverse_lazy
 from django.views import View
 from django.db.models import Sum
+from django.views.generic import FormView
 
+from donations.forms import RegisterForm
 from donations.models import Donation, Institution
 
 
@@ -68,7 +72,23 @@ class Login(View):
         return render(request, 'login.html')
 
 
-class Register(View):
+class Register(FormView):
+    form_class = RegisterForm
+    template_name = 'register.html'
+    success_url = reverse_lazy('login')
 
-    def get(self, request):
-        return render(request, 'register.html')
+    def form_valid(self, form):
+        first_name = form.cleaned_data.get('first_name')
+        last_name = form.cleaned_data.get('last_name')
+        email = form.cleaned_data.get('email')
+        password = form.cleaned_data.get('password1')
+
+        new_user = User(
+            username=email,
+            first_name=first_name,
+            last_name=last_name
+        )
+        new_user.set_password(password)
+        new_user.save()
+
+        return redirect(f'{self.get_success_url()}#login')
