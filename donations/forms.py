@@ -20,8 +20,8 @@ class RegisterForm(UserCreationForm):
         validators=(is_alpha_validator, )
     )
     email = forms.EmailField(widget=forms.TextInput(attrs={'placeholder': 'Email'}))
-    password1 = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Hasło'}))
-    password2 = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Powtórz hasło'}))
+    password1 = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Hasło', 'type': 'password'}))
+    password2 = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Powtórz hasło', 'type': 'password'}))
 
     class Meta:
         model = User
