@@ -199,6 +199,9 @@ document.addEventListener("DOMContentLoaded", function() {
       this.$next.forEach(btn => {
         btn.addEventListener("click", e => {
           e.preventDefault();
+
+          this.hideInstitutions(btn)
+
           this.currentStep++;
           this.updateForm();
         });
@@ -215,6 +218,36 @@ document.addEventListener("DOMContentLoaded", function() {
 
       // Form submit
       this.$form.querySelector("form").addEventListener("submit", e => this.submit(e));
+    }
+
+    hideInstitutions(btn){
+      if (btn.parentElement.parentElement.dataset.step === "1") {
+            let institutions = form.querySelectorAll("[data-step='3'] .form-group--checkbox input")
+            let checked_categories = this.getCheckedCategories()
+
+            institutions.forEach(institution => {
+              institution.parentElement.parentElement.style.display = "block";
+              checked_categories.forEach(category => {
+                let institution_categories = institution.dataset.categories.split(" ");
+                if (!institution_categories.includes(category.value)){
+                  institution.parentElement.parentElement.style.display = "none";
+                }
+              });
+            });
+          }
+    }
+
+    getCheckedCategories(){
+      let checked_categories = [];
+
+      form.querySelectorAll("[data-step='1'] .form-group--checkbox input")
+          .forEach(e => {
+            if(e.checked) {
+              checked_categories.push(e)
+            }
+          });
+
+      return checked_categories
     }
 
     /**
