@@ -67,7 +67,7 @@ class AddDonation(LoginRequiredMixin, View):
     def get(self, request):
         context = {}
         context['categories'] = Category.objects.all()
-
+        context['institutions'] = Institution.objects.all()
         return render(request, 'form.html', context)
 
 
