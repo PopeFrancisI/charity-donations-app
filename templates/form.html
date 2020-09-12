@@ -110,7 +110,7 @@
                     {% for institution in institutions %}
                     <div class="form-group form-group--checkbox">
                         <label>
-                            <input type="radio" name="organization" value="{{ institution.id }}"
+                            <input type="radio" name="organization" value="{{ institution.id }}" data-institutionname="{{ institution.name }}"
                                    data-categories="{% for category in institution.categories.all %}{{ category.id }} {% endfor %}"
                             />
                             <span class="checkbox radio"></span>
@@ -197,7 +197,7 @@
 
                                 <li>
                                     <span class="icon icon-hand"></span>
-                                    <span class="summary--text"
+                                    <span id="summary-institution-name" class="summary--text"
                                     >Dla fundacji "Mam marzenie" w Warszawie</span
                                     >
                                 </li>
@@ -208,10 +208,10 @@
                             <div class="form-section--column">
                                 <h4>Adres odbioru:</h4>
                                 <ul>
-                                    <li>Prosta 51</li>
-                                    <li>Warszawa</li>
-                                    <li>99-098</li>
-                                    <li>123 456 789</li>
+                                    <li id="summary-address">Prosta 51</li>
+                                    <li id="summary-city">Warszawa</li>
+                                    <li id="summary-postcode">99-098</li>
+                                    <li id="summary-phone">123 456 789</li>
                                 </ul>
                             </div>
 

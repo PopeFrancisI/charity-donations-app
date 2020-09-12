@@ -254,16 +254,34 @@ document.addEventListener("DOMContentLoaded", function() {
       return checked_categories
     }
 
+    getCheckedInstitution(){
+      return form.querySelector()
+    }
+
     displayFormInputData(){
       let summary_bags_categories = form.querySelector(".summary #summary-bags-categories");
       let bags_count = form.querySelector("[name=bags]").value;
       let checked_categories = this.getCheckedCategories()
       let checked_categories_names = []
       checked_categories.forEach(e => {checked_categories_names.push(e.dataset.categoryname.toLowerCase())})
-      console.log(checked_categories_names)
 
+      let summary_institution = form.querySelector(".summary #summary-institution-name");
+      let institutions = form.querySelectorAll("[data-step='3'] input[name='organization']")
+      let institution_name = ''
+      institutions.forEach(e => {if(e.checked) {institution_name = e.dataset.institutionname;}})
 
-      summary_bags_categories.innerHTML = `${bags_count} worek/worków z przedmiotami z kategorii: ${checked_categories_names}`;
+      let summary_address = form.querySelector("li#summary-address")
+      summary_address.innerHTML = form.querySelector("input[name='address']").value
+      let summary_city = form.querySelector("li#summary-city")
+      summary_city.innerHTML = form.querySelector("input[name='city']").value
+      let summary_postcode = form.querySelector("li#summary-postcode")
+      summary_postcode.innerHTML = form.querySelector("input[name='postcode']").value
+      let summary_phone = form.querySelector("li#summary-phone")
+      summary_phone.innerHTML = form.querySelector("input[name='phone']").value
+
+      summary_bags_categories.innerHTML = `${bags_count} worek/worków z przedmiotami z kategorii: ${checked_categories_names}.`;
+      summary_institution.innerHTML = `Dla organizacji "${institution_name}".`
+
     }
 
     /**
