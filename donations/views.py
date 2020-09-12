@@ -6,7 +6,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse, reverse_lazy
 from django.views import View
 from django.db.models import Sum
-from django.views.generic import FormView
+from django.views.generic import FormView, TemplateView
 
 from donations.forms import RegisterForm
 from donations.models import Donation, Institution, Category
@@ -65,10 +65,47 @@ class LandingPage(View):
 class AddDonation(LoginRequiredMixin, View):
 
     def get(self, request):
-        context = {}
-        context['categories'] = Category.objects.all()
-        context['institutions'] = Institution.objects.all()
+        context = {
+            'categories': Category.objects.all(),
+            'institutions': Institution.objects.all()
+        }
         return render(request, 'form.html', context)
+
+    def post(self, request):
+        quantity = int(request.POST.get('bags'))
+        categories = request.POST.getlist('categories')
+        institution = Institution.objects.get(id=int(request.POST.get('institution')))
+        address = request.POST.get('address')
+        city = request.POST.get('city')
+        zip_code = request.POST.get('postcode')
+        phone_number = request.POST.get('phone')
+        pick_up_date = request.POST.get('date')
+        pick_up_time = request.POST.get('time')
+        pick_up_comment = request.POST.get('more_info')
+        user = request.user
+
+        donation = Donation(
+            quantity=quantity,
+            institution=institution,
+            address=address,
+            city=city,
+            zip_code=zip_code,
+            phone_number=phone_number,
+            pick_up_date=pick_up_date,
+            pick_up_time=pick_up_time,
+            pick_up_comment=pick_up_comment,
+            user=user
+        )
+        try:
+            donation.save()
+
+            for category in categories:
+                donation.categories.add(category)
+
+            return render(request, 'form-confirmation.html')
+        except Exception as ex:
+            print(ex)
+            return render(request, 'form-confirmation.html')
 
 
 class Login(View):

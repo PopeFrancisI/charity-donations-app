@@ -266,7 +266,7 @@ document.addEventListener("DOMContentLoaded", function() {
       checked_categories.forEach(e => {checked_categories_names.push(e.dataset.categoryname.toLowerCase())})
 
       let summary_institution = form.querySelector(".summary #summary-institution-name");
-      let institutions = form.querySelectorAll("[data-step='3'] input[name='organization']")
+      let institutions = form.querySelectorAll("[data-step='3'] input[name='institution']")
       let institution_name = ''
       institutions.forEach(e => {if(e.checked) {institution_name = e.dataset.institutionname;}})
 
@@ -283,7 +283,7 @@ document.addEventListener("DOMContentLoaded", function() {
       summary_phone.innerHTML = form.querySelector("input[name='phone']").value
 
       let summary_date = form.querySelector("li#summary-date")
-      summary_date.innerHTML = form.querySelector("input[name='data']").value
+      summary_date.innerHTML = form.querySelector("input[name='date']").value
       let summary_time = form.querySelector("li#summary-time")
       summary_time.innerHTML = form.querySelector("input[name='time']").value
       let summary_more_info = form.querySelector("li#summary-more_info")
@@ -309,8 +309,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
       this.$stepInstructions[0].parentElement.parentElement.hidden = this.currentStep >= 6;
       this.$step.parentElement.hidden = this.currentStep >= 6;
-
-      // TODO: get data from inputs and show them in summary
     }
 
     /**
@@ -322,6 +320,9 @@ document.addEventListener("DOMContentLoaded", function() {
       e.preventDefault();
       this.currentStep++;
       this.updateForm();
+      $.post("/adddonation/", $("form").serialize(), function (){
+        $('section.form--steps').load('/formconfirmation# .slogan.container.container--90')
+      });
     }
 
   }
