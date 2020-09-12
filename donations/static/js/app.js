@@ -270,6 +270,9 @@ document.addEventListener("DOMContentLoaded", function() {
       let institution_name = ''
       institutions.forEach(e => {if(e.checked) {institution_name = e.dataset.institutionname;}})
 
+      summary_bags_categories.innerHTML = `${bags_count} worek/worków z przedmiotami z kategorii: ${checked_categories_names}.`;
+      summary_institution.innerHTML = `Dla organizacji "${institution_name}".`
+
       let summary_address = form.querySelector("li#summary-address")
       summary_address.innerHTML = form.querySelector("input[name='address']").value
       let summary_city = form.querySelector("li#summary-city")
@@ -279,9 +282,12 @@ document.addEventListener("DOMContentLoaded", function() {
       let summary_phone = form.querySelector("li#summary-phone")
       summary_phone.innerHTML = form.querySelector("input[name='phone']").value
 
-      summary_bags_categories.innerHTML = `${bags_count} worek/worków z przedmiotami z kategorii: ${checked_categories_names}.`;
-      summary_institution.innerHTML = `Dla organizacji "${institution_name}".`
-
+      let summary_date = form.querySelector("li#summary-date")
+      summary_date.innerHTML = form.querySelector("input[name='data']").value
+      let summary_time = form.querySelector("li#summary-time")
+      summary_time.innerHTML = form.querySelector("input[name='time']").value
+      let summary_more_info = form.querySelector("li#summary-more_info")
+      summary_more_info.innerHTML = form.querySelector("textarea[name='more_info']").value
     }
 
     /**
