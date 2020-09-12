@@ -200,7 +200,13 @@ document.addEventListener("DOMContentLoaded", function() {
         btn.addEventListener("click", e => {
           e.preventDefault();
 
-          this.hideInstitutions(btn)
+          if (btn.parentElement.parentElement.dataset.step === "1") {
+            this.hideInstitutions()
+          }
+
+          if (btn.parentElement.parentElement.dataset.step === "4") {
+            this.displayFormData()
+          }
 
           this.currentStep++;
           this.updateForm();
@@ -220,21 +226,19 @@ document.addEventListener("DOMContentLoaded", function() {
       this.$form.querySelector("form").addEventListener("submit", e => this.submit(e));
     }
 
-    hideInstitutions(btn){
-      if (btn.parentElement.parentElement.dataset.step === "1") {
-            let institutions = form.querySelectorAll("[data-step='3'] .form-group--checkbox input")
-            let checked_categories = this.getCheckedCategories()
+    hideInstitutions(){
+      let institutions = form.querySelectorAll("[data-step='3'] .form-group--checkbox input")
+      let checked_categories = this.getCheckedCategories()
 
-            institutions.forEach(institution => {
-              institution.parentElement.parentElement.style.display = "block";
-              checked_categories.forEach(category => {
-                let institution_categories = institution.dataset.categories.split(" ");
-                if (!institution_categories.includes(category.value)){
-                  institution.parentElement.parentElement.style.display = "none";
-                }
-              });
-            });
+      institutions.forEach(institution => {
+        institution.parentElement.parentElement.style.display = "block";
+        checked_categories.forEach(category => {
+          let institution_categories = institution.dataset.categories.split(" ");
+          if (!institution_categories.includes(category.value)){
+            institution.parentElement.parentElement.style.display = "none";
           }
+        });
+      });
     }
 
     getCheckedCategories(){
@@ -283,6 +287,7 @@ document.addEventListener("DOMContentLoaded", function() {
       this.currentStep++;
       this.updateForm();
     }
+
   }
   const form = document.querySelector(".form--steps");
   if (form !== null) {
