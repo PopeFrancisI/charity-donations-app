@@ -270,7 +270,7 @@ document.addEventListener("DOMContentLoaded", function() {
       let institution_name = ''
       institutions.forEach(e => {if(e.checked) {institution_name = e.dataset.institutionname;}})
 
-      summary_bags_categories.innerHTML = `${bags_count} worek/worków z przedmiotami z kategorii: ${checked_categories_names}.`;
+      summary_bags_categories.innerHTML = `${bags_count} worek/worków z przedmiotami z kategorii: ${checked_categories_names.join(", ")}.`;
       summary_institution.innerHTML = `Dla organizacji "${institution_name}".`
 
       let summary_address = form.querySelector("li#summary-address")
