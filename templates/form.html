@@ -70,6 +70,7 @@
                                     type="checkbox"
                                     name="categories"
                                     value="{{ category.id }}"
+                                    data-categoryname="{{ category.name }}"
                             />
                             <span class="checkbox"></span>
                             <span class="description"
@@ -189,7 +190,7 @@
                             <ul>
                                 <li>
                                     <span class="icon icon-bag"></span>
-                                    <span class="summary--text"
+                                    <span id="summary-bags-categories" class="summary--text"
                                     >4 worki ubrań w dobrym stanie dla dzieci</span
                                     >
                                 </li>

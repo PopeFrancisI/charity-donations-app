@@ -205,7 +205,7 @@ document.addEventListener("DOMContentLoaded", function() {
           }
 
           if (btn.parentElement.parentElement.dataset.step === "4") {
-            this.displayFormData()
+            this.displayFormInputData()
           }
 
           this.currentStep++;
@@ -252,6 +252,18 @@ document.addEventListener("DOMContentLoaded", function() {
           });
 
       return checked_categories
+    }
+
+    displayFormInputData(){
+      let summary_bags_categories = form.querySelector(".summary #summary-bags-categories");
+      let bags_count = form.querySelector("[name=bags]").value;
+      let checked_categories = this.getCheckedCategories()
+      let checked_categories_names = []
+      checked_categories.forEach(e => {checked_categories_names.push(e.dataset.categoryname.toLowerCase())})
+      console.log(checked_categories_names)
+
+
+      summary_bags_categories.innerHTML = `${bags_count} worek/worków z przedmiotami z kategorii: ${checked_categories_names}`;
     }
 
     /**
