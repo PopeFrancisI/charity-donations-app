@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.urls import path
 from django.views.generic import TemplateView
 
-from donations.views import LandingPage, AddDonation, Login, Register, Logout
+from donations.views import LandingPage, AddDonation, Login, Register, Logout, UserProfile
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -27,4 +27,5 @@ urlpatterns = [
     path('login/', Login.as_view(), name='login'),
     path('logout/', Logout.as_view(), name='logout'),
     path('register/', Register.as_view(), name='register'),
+    path('profile/', UserProfile.as_view(), name='user_profile'),
 ]
