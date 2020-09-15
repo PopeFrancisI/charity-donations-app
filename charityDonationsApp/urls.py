@@ -20,7 +20,7 @@ from django.views.generic import TemplateView
 from donations.views import LandingPage, AddDonation, Login, Register, Logout
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('admin/', admin.site.urls, name='admin'),
     path('', LandingPage.as_view(), name='landing_page'),
     path('adddonation/', AddDonation.as_view(), name='donation_add'),
     path('formconfirmation/', TemplateView.as_view(template_name='form-confirmation.html'), name='form_confirmation'),
