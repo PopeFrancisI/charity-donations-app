@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <h1>Twoje dane:</h1>
+
+    <p>Imię: {{ request.user.first_name }}</p>
+    <p>Nazwisko: {{ request.user.last_name }}</p>
+    <p>Email: {{ request.user.username }}</p>
+
+{% endblock %}
