@@ -17,3 +17,32 @@
     </div>
 
 {% endblock %}
+
+{% block content %}
+    <div class="slogan container">
+        <div class="steps">
+            <h2>Lista twoich darów</h2>
+        </div>
+    </div>
+
+
+    <ul>
+        {% for donation in user_donations %}
+            <ul>
+                <h1>"{{ donation.institution.name }}" / worków: {{ donation.quantity }} </h1>
+                <p>
+                    Data odebrania: {{ donation.pick_up_date}} {{ donation.pick_up_time }} |
+                    Kategorie:{% for category in donation.categories.all %}
+                    {{ category.name }}
+                    {% if not forloop.last %}, {% endif %}
+
+                    {% endfor %}
+
+                </p>
+            </ul>
+        {% endfor %}
+    </ul>
+
+
+
+{% endblock %}

@@ -154,7 +154,8 @@ class Register(FormView):
         return redirect(f'{self.get_success_url()}#login')
 
 
-class UserProfile(View):
+class UserProfile(LoginRequiredMixin, View):
 
     def get(self, request):
-        return render(request, 'user_profile.html')
+        context = {'user_donations': request.user.donation_set.all().order_by('-pick_up_date').order_by('-pick_up_time')}
+        return render(request, 'user_profile.html', context)
