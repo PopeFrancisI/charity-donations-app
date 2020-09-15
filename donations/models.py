@@ -5,6 +5,9 @@ from django.db import models
 class Category(models.Model):
     name = models.CharField(max_length=64, unique=True)
 
+    def __str__(self):
+        return self.name
+
 
 class Institution(models.Model):
     institution_types = (
@@ -33,3 +36,6 @@ class Donation(models.Model):
     pick_up_time = models.TimeField()
     pick_up_comment = models.TextField()
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, default=None)
+
+    def __str__(self):
+        return f'{self.user.username} => {self.institution.name}, {str(self.pick_up_date) + " " + str(self.pick_up_time)}'
