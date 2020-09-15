@@ -152,3 +152,9 @@ class Register(FormView):
         new_user.save()
 
         return redirect(f'{self.get_success_url()}#login')
+
+
+class UserProfile(View):
+
+    def get(self, request):
+        return render(request, 'user_profile.html')
