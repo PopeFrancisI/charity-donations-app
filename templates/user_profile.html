@@ -1,11 +1,19 @@
 {% extends 'base.html' %}
 
-{% block content %}
+{% block slogan %}
 
-    <h1>Twoje dane:</h1>
+    <div class="slogan container container--90">
+        <div class="slogan--item">
+            <h1>
+                Twoje dane
+            </h1>
 
-    <p>Imię: {{ request.user.first_name }}</p>
-    <p>Nazwisko: {{ request.user.last_name }}</p>
-    <p>Email: {{ request.user.username }}</p>
+            <div class="slogan--steps">
+                <div class="slogan--steps-title">Imię: {{ request.user.first_name }}</div>
+                <div class="slogan--steps-title">Nazwisko: {{ request.user.last_name }}</div>
+                <div class="slogan--steps-title">Email: {{ request.user.username }}</div>
+            </div>
+        </div>
+    </div>
 
 {% endblock %}
