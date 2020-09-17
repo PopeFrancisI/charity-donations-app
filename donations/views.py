@@ -157,5 +157,11 @@ class Register(FormView):
 class UserProfile(LoginRequiredMixin, View):
 
     def get(self, request):
-        context = {'user_donations': request.user.donation_set.all().order_by('-pick_up_date').order_by('-pick_up_time')}
+        donations = request.user.donation_set.all().order_by('-pick_up_date').order_by('-pick_up_time')
+        pending_donations = donations.filter(is_taken=False)
+        archived_donations = donations.filter(is_taken=True)
+        context = {
+            'user_donations': pending_donations,
+            'archived_user_donations': archived_donations,
+        }
         return render(request, 'user_profile.html', context)
