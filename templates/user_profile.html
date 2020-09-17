@@ -47,7 +47,7 @@
         <ul class="archived-donations" style="color: gray">
             {% for donation in archived_user_donations %}
                 <li>
-                    <h1>"{{ donation.institution.name }}" / worków: {{ donation.quantity }} </h1>
+                    <h1>"{{ donation.institution.name }}" / worków: {{ donation.quantity }} (zarchiwizowany)</h1>
                     <p>
                         Data odebrania: {{ donation.pick_up_date}} {{ donation.pick_up_time }} |
                         Kategorie:{% for category in donation.categories.all %}
