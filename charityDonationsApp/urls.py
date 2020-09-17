@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.urls import path
 from django.views.generic import TemplateView
 
-from donations.views import LandingPage, AddDonation, Login, Register, Logout, UserProfile
+from donations.views import LandingPage, AddDonation, Login, Register, Logout, UserProfile, DonationUpdate
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -28,4 +28,6 @@ urlpatterns = [
     path('logout/', Logout.as_view(), name='logout'),
     path('register/', Register.as_view(), name='register'),
     path('profile/', UserProfile.as_view(), name='user_profile'),
+
+    path('api/donation/<int:pk>/', DonationUpdate.as_view())
 ]

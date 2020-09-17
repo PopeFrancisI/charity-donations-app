@@ -254,10 +254,6 @@ document.addEventListener("DOMContentLoaded", function() {
       return checked_categories
     }
 
-    getCheckedInstitution(){
-      return form.querySelector()
-    }
-
     displayFormInputData(){
       let summary_bags_categories = form.querySelector(".summary #summary-bags-categories");
       let bags_count = form.querySelector("[name=bags]").value;
@@ -329,5 +325,63 @@ document.addEventListener("DOMContentLoaded", function() {
   const form = document.querySelector(".form--steps");
   if (form !== null) {
     new FormSteps(form);
+  }
+
+  class Donations {
+    constructor() {
+      this.$archive_buttons = donations.querySelectorAll(".btn--archive");
+
+      this.init();
+    }
+
+    init() {
+      this.events();
+    }
+
+
+
+    events() {
+      this.$archive_buttons.forEach(btn => {
+        btn.addEventListener("click", e => {
+
+          const csrftoken = getCookie('csrftoken');
+
+          $.ajax({url: `/api/donation/${btn.value}/`,
+            type: 'PATCH',
+            timeout: 3000,
+            data: { id: btn.value, is_taken: true },
+            headers: { "X-CSRFTOKEN": csrftoken }
+          })
+          .fail(function(){
+            alert('Error updating this model instance.');
+          })
+          .done(function(){
+            let donation_li = btn.parentElement.parentElement
+            document.querySelector('.archived-donations').appendChild(donation_li)
+          });
+
+        });
+      });
+    }
+  }
+  const donations = document.querySelector(".donations")
+  if (donations !== null) {
+    new Donations()
+  }
+
+  function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
   }
 });

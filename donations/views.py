@@ -6,10 +6,13 @@ from django.shortcuts import render, redirect
 from django.urls import reverse, reverse_lazy
 from django.views import View
 from django.db.models import Sum
-from django.views.generic import FormView, TemplateView
+from django.views.generic import FormView
+from rest_framework.generics import UpdateAPIView
+from rest_framework.permissions import IsAuthenticated
 
 from donations.forms import RegisterForm
 from donations.models import Donation, Institution, Category
+from donations.serializers import DonationSerializer
 
 
 class LandingPage(View):
@@ -165,3 +168,11 @@ class UserProfile(LoginRequiredMixin, View):
             'archived_user_donations': archived_donations,
         }
         return render(request, 'user_profile.html', context)
+
+
+class DonationUpdate(UpdateAPIView):
+    queryset = Donation.objects.all()
+    permission_classes = [
+        IsAuthenticated
+    ]
+    serializer_class = DonationSerializer
