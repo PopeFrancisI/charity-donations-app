@@ -2,17 +2,11 @@
 
 {% block slogan %}
 
-    <div class="slogan container container--90">
+    <div class="container--90 container slogan">
         <div class="slogan--item">
             <h1>
-                Zmiana danych
+                Ustawienia
             </h1>
-
-            <form class="slogan--steps-title" method="post" style="display: block">
-                {% csrf_token %}
-                {{ form.as_p }}
-                <input type="submit" value="Zmień">
-            </form>
         </div>
     </div>
 
@@ -20,5 +14,51 @@
 
 
 {% block content %}
+
+    <div class="container container--90">
+        <div class="">
+            <h1>
+                Zmiana danych
+            </h1>
+
+            <form class="" method="post" style="display: block">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <p>
+                    <label for="password">Potwierdź hasłem:</label>
+                    <input id="password" name="password" type="password">
+                    <input type="submit" value="Zapisz">
+                </p>
+            </form>
+
+            <br>
+            <hr>
+
+            <h1>
+                Zmiana hasła
+            </h1>
+
+            <form class="" method="post" style="display: block">
+                {% csrf_token %}
+
+                <p>
+                    <label for="new-password">Stare hasło:</label>
+                    <input id="new-password" name="old-password" type="password">
+                </p>
+
+                <p>
+                    <label for="new-password">Nowe hasło:</label>
+                    <input id="new-password" name="new-password1" type="password">
+                </p>
+
+                <p>
+                    <label for="new-password">Powtórz nowe hasło:</label>
+                    <input id="new-password" name="new-password2" type="password">
+                    <input type="submit" value="Zmień hasło">
+                </p>
+
+            </form>
+        </div>
+    </div>
 
 {% endblock %}
