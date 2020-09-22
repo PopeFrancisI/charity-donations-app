@@ -2,6 +2,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.core.paginator import Paginator
+from django.core.validators import validate_email, MinLengthValidator
 from django.forms import ModelForm
 from django.shortcuts import render, redirect
 from django.urls import reverse, reverse_lazy
@@ -192,4 +193,7 @@ class UserProfileEdit(LoginRequiredMixin, UpdateView):
         form: ModelForm
         form = super().get_form(form_class)
         form.fields['username'].help_text = ''
+        form.fields['username'].validators = [validate_email]
+        form.fields['first_name'].validators = [MinLengthValidator(2, 'Imię musi zawierać przynajmniej 2 znaki')]
+        form.fields['last_name'].validators = [MinLengthValidator(2, 'Nazwisko musi zawierać przynajmniej 2 znaki')]
         return form
