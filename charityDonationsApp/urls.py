@@ -28,6 +28,7 @@ urlpatterns = [
     path('logout/', Logout.as_view(), name='logout'),
     path('register/', Register.as_view(), name='register'),
     path('profile/', UserProfile.as_view(), name='user_profile'),
+    path('profile/edit', UserProfileEdit.as_view(), name='user_profile_edit'),
 
     path('api/donation/<int:pk>/', DonationUpdate.as_view())
 ]
