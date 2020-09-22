@@ -1,6 +1,9 @@
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.hashers import check_password
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
+from django.contrib.auth.password_validation import validate_password, password_changed
+from django.core.exceptions import ValidationError
 from django.core.paginator import Paginator
 from django.core.validators import validate_email, MinLengthValidator
 from django.forms import ModelForm
@@ -11,10 +14,12 @@ from django.db.models import Sum
 from django.views.generic import FormView, UpdateView
 from rest_framework.generics import UpdateAPIView
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.serializers import Serializer
 
 from donations.forms import RegisterForm, UserProfileEditForm
 from donations.models import Donation, Institution, Category
-from donations.serializers import DonationSerializer
+from donations.serializers import DonationSerializer, UserProfileSerializer, UserPasswordSerializer
 
 
 class LandingPage(View):
@@ -180,10 +185,9 @@ class DonationUpdate(UpdateAPIView):
     serializer_class = DonationSerializer
 
 
-class UserProfileEdit(LoginRequiredMixin, UpdateView):
+class UserProfileEdit(LoginRequiredMixin, FormView):
     form_class = UserProfileEditForm
     template_name = 'user_profile_edit.html'
-    model = User
     success_url = reverse_lazy('user_profile')
 
     def get_object(self, queryset=None):
@@ -191,9 +195,62 @@ class UserProfileEdit(LoginRequiredMixin, UpdateView):
 
     def get_form(self, form_class=None):
         form: ModelForm
+        user = self.request.user
         form = super().get_form(form_class)
         form.fields['username'].help_text = ''
-        form.fields['username'].validators = [validate_email]
-        form.fields['first_name'].validators = [MinLengthValidator(2, 'Imię musi zawierać przynajmniej 2 znaki')]
-        form.fields['last_name'].validators = [MinLengthValidator(2, 'Nazwisko musi zawierać przynajmniej 2 znaki')]
+        form.fields['username'].initial = user.username
+        form.fields['first_name'].initial = user.first_name
+        form.fields['last_name'].initial = user.last_name
         return form
+
+
+class UserProfileUpdate(UpdateAPIView):
+    queryset = User.objects.all()
+    permission_classes = [
+        IsAuthenticated
+    ]
+    serializer_class = UserProfileSerializer
+
+    def get_object(self):
+        return self.request.user
+
+    def update(self, request, *args, **kwargs):
+        if check_password(request.data['password'], self.request.user.password):
+            return super().update(request, args, kwargs)
+        else:
+            return Response(status=500)
+
+
+class UserPasswordUpdate(UpdateAPIView):
+    queryset = User.objects.all()
+    permission_classes = [
+        IsAuthenticated
+    ]
+    serializer_class = UserPasswordSerializer
+
+    def get_object(self):
+        return self.request.user
+
+    def update(self, request, *args, **kwargs):
+        user = self.get_object()
+        serializer: Serializer
+        serializer = self.get_serializer(data=request.data)
+
+        if serializer.is_valid():
+            try:
+                validate_password(serializer.data.get('new_password1'))
+                validate_password(serializer.data.get('new_password2'))
+            except ValidationError:
+                return Response(status=500)
+
+            if not check_password(serializer.data.get('old_password'), self.request.user.password):
+                return Response(status=500)
+
+            user.set_password(serializer.data.get('new_password2'))
+            user.save()
+            login(request, user)
+
+            return Response({
+                'status': 'success',
+                'code': 200
+            })

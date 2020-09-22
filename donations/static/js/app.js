@@ -369,6 +369,90 @@ document.addEventListener("DOMContentLoaded", function() {
     new Donations()
   }
 
+  class ProfileSettings {
+    constructor() {
+      this.$save_button = profile_settings.querySelector("#save-button");
+      this.$change_password_button = profile_settings.querySelector("#change-password-button");
+
+      this.init();
+    }
+
+    init() {
+      this.events();
+    }
+
+
+
+    events() {
+
+      let save_btn = this.$save_button
+      save_btn.addEventListener("click", e => {
+
+        e.preventDefault()
+
+        let csrftoken = getCookie('csrftoken');
+
+        let email = profile_settings.querySelector("#id_username");
+        let first_name = profile_settings.querySelector("#id_first_name");
+        let last_name = profile_settings.querySelector("#id_last_name");
+        let password = profile_settings.querySelector("#password");
+
+        $.ajax({url: `/api/user/profile/`,
+          type: 'PATCH',
+          timeout: 3000,
+          data: {
+            username: email.value,
+            first_name: first_name.value,
+            last_name: last_name.value,
+            password: password.value
+          },
+          headers: { "X-CSRFTOKEN": csrftoken }
+        })
+        .fail(function(){
+          alert('Nie udało się zaktualizować danych. Upewnij się, że wpisane przez Ciebie hasło jest poprawne.');
+        })
+        .done(function(){
+          alert('Twoje dane zostały pomyślnie zmienione.');
+        });
+
+      });
+
+      let change_password_btn = this.$change_password_button
+      change_password_btn.addEventListener("click", e => {
+
+        e.preventDefault()
+
+        let csrftoken = getCookie('csrftoken');
+
+        let old_password = profile_settings.querySelector("#old-password");
+        let new_password1 = profile_settings.querySelector("#new-password1");
+        let new_password2 = profile_settings.querySelector("#new-password2");
+
+        $.ajax({url: `/api/user/password/`,
+          type: 'PATCH',
+          timeout: 3000,
+          data: {
+            old_password: old_password.value,
+            new_password1: new_password1.value,
+            new_password2: new_password2.value,
+          },
+          headers: { "X-CSRFTOKEN": csrftoken }
+        })
+        .fail(function(){
+          alert('Nie udało się ustawić nowego hasła. Upewnij się, że poprawnie wpisałeś wszystkie hasła.');
+        })
+        .done(function(){
+          alert('Twoje hasło zostało pomyślnie zmienione.');
+        });
+
+      });
+    }
+  }
+  const profile_settings = document.querySelector("#profile-settings")
+  if (profile_settings !== null) {
+    new ProfileSettings()
+  }
+
   function getCookie(name) {
     let cookieValue = null;
     if (document.cookie && document.cookie !== '') {

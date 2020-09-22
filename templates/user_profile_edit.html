@@ -3,7 +3,7 @@
 {% block slogan %}
 
     <div class="container--90 container slogan">
-        <div class="slogan--item">
+        <div id="settings" class="slogan--item">
             <h1>
                 Ustawienia
             </h1>
@@ -16,18 +16,17 @@
 {% block content %}
 
     <div class="container container--90">
-        <div class="">
+        <div id="profile-settings" class="">
             <h1>
                 Zmiana danych
             </h1>
 
-            <form class="" method="post" style="display: block">
-                {% csrf_token %}
+            <form id="user-data-form" class="" style="display: block">
                 {{ form.as_p }}
                 <p>
                     <label for="password">Potwierdź hasłem:</label>
                     <input id="password" name="password" type="password">
-                    <input type="submit" value="Zapisz">
+                    <input id="save-button" type="submit" value="Zapisz">
                 </p>
             </form>
 
@@ -38,23 +37,24 @@
                 Zmiana hasła
             </h1>
 
-            <form class="" method="post" style="display: block">
+            <form id="user-password-form" class="" style="display: block">
                 {% csrf_token %}
 
                 <p>
-                    <label for="new-password">Stare hasło:</label>
-                    <input id="new-password" name="old-password" type="password">
+                    <label for="old-password">Stare hasło:</label>
+                    <input id="old-password" name="old-password" type="password">
                 </p>
 
                 <p>
-                    <label for="new-password">Nowe hasło:</label>
-                    <input id="new-password" name="new-password1" type="password">
+                    <label for="new-password1">Nowe hasło:</label>
+                    <input id="new-password1" name="new-password1" type="password">
                 </p>
 
                 <p>
-                    <label for="new-password">Powtórz nowe hasło:</label>
-                    <input id="new-password" name="new-password2" type="password">
-                    <input type="submit" value="Zmień hasło">
+                    <label for="new-password2">Powtórz nowe hasło:</label>
+                    <input id="new-password2" name="new-password2" type="password">
+
+                    <input id="change-password-button" type="submit" value="Zmień hasło">
                 </p>
 
             </form>

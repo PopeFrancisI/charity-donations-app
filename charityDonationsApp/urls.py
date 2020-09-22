@@ -18,7 +18,7 @@ from django.urls import path
 from django.views.generic import TemplateView
 
 from donations.views import LandingPage, AddDonation, Login, Register, Logout, UserProfile, DonationUpdate, \
-    UserProfileEdit
+    UserProfileEdit, UserProfileUpdate, UserPasswordUpdate
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -31,5 +31,7 @@ urlpatterns = [
     path('profile/', UserProfile.as_view(), name='user_profile'),
     path('profile/edit/', UserProfileEdit.as_view(), name='user_profile_edit'),
 
-    path('api/donation/<int:pk>/', DonationUpdate.as_view())
+    path('api/donation/<int:pk>/', DonationUpdate.as_view()),
+    path('api/user/profile/', UserProfileUpdate.as_view()),
+    path('api/user/password/', UserPasswordUpdate.as_view()),
 ]
