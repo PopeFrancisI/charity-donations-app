@@ -176,3 +176,9 @@ class DonationUpdate(UpdateAPIView):
         IsAuthenticated
     ]
     serializer_class = DonationSerializer
+
+
+class UserProfileEdit(LoginRequiredMixin, FormView):
+    form_class = UserProfileEditForm
+    template_name = 'user_profile_edit.html'
+
