@@ -10,7 +10,7 @@ from django.views.generic import FormView
 from rest_framework.generics import UpdateAPIView
 from rest_framework.permissions import IsAuthenticated
 
-from donations.forms import RegisterForm
+from donations.forms import RegisterForm, UserProfileEditForm
 from donations.models import Donation, Institution, Category
 from donations.serializers import DonationSerializer
 
