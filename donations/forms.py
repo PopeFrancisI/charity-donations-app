@@ -36,6 +36,12 @@ class RegisterForm(UserCreationForm):
 
 
 class UserProfileEditForm(ModelForm):
+
     class Meta:
         model = User
         fields = ('username', 'first_name', 'last_name')
+        labels = {
+            'username': 'Email',
+            'first_name': 'Imię',
+            'last_name': 'Nazwisko',
+        }

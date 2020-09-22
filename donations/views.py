@@ -2,11 +2,12 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.core.paginator import Paginator
+from django.forms import ModelForm
 from django.shortcuts import render, redirect
 from django.urls import reverse, reverse_lazy
 from django.views import View
 from django.db.models import Sum
-from django.views.generic import FormView
+from django.views.generic import FormView, UpdateView
 from rest_framework.generics import UpdateAPIView
 from rest_framework.permissions import IsAuthenticated
 
@@ -178,7 +179,17 @@ class DonationUpdate(UpdateAPIView):
     serializer_class = DonationSerializer
 
 
-class UserProfileEdit(LoginRequiredMixin, FormView):
+class UserProfileEdit(LoginRequiredMixin, UpdateView):
     form_class = UserProfileEditForm
     template_name = 'user_profile_edit.html'
+    model = User
+    success_url = reverse_lazy('user_profile')
 
+    def get_object(self, queryset=None):
+        return self.request.user
+
+    def get_form(self, form_class=None):
+        form: ModelForm
+        form = super().get_form(form_class)
+        form.fields['username'].help_text = ''
+        return form

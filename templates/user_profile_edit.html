@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block slogan %}
+
+    <div class="slogan container container--90">
+        <div class="slogan--item">
+            <h1>
+                Zmiana danych
+            </h1>
+
+            <form class="slogan--steps-title" method="post" style="display: block">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <input type="submit" value="Zmień">
+            </form>
+        </div>
+    </div>
+
+{% endblock %}
+
+
+{% block content %}
+
+{% endblock %}
