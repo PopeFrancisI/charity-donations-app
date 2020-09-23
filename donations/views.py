@@ -254,3 +254,5 @@ class UserPasswordUpdate(UpdateAPIView):
                 'status': 'success',
                 'code': 200
             })
+        else:
+            return Response(status=500)
