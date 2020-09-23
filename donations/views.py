@@ -17,7 +17,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.serializers import Serializer
 
-from donations.forms import RegisterForm, UserProfileEditForm
+from donations.forms import RegisterForm, UserProfileEditForm, is_alpha_validator
 from donations.models import Donation, Institution, Category
 from donations.serializers import DonationSerializer, UserProfileSerializer, UserPasswordSerializer
 
@@ -215,10 +215,20 @@ class UserProfileUpdate(UpdateAPIView):
         return self.request.user
 
     def update(self, request, *args, **kwargs):
-        if check_password(request.data['password'], self.request.user.password):
+        try:
+            self.validate_profile_data(request.data)
             return super().update(request, args, kwargs)
-        else:
+        except ValidationError:
             return Response(status=500)
+
+    def validate_profile_data(self, data):
+        if not check_password(data['password'], self.request.user.password):
+            raise ValidationError('Incorrect password.')
+        if not data['username'] or not data['first_name'] or not data['last_name']:
+            raise ValidationError('No blank fields allowed.')
+        validate_email(data['username'])
+        is_alpha_validator(data['first_name'])
+        is_alpha_validator(data['last_name'])
 
 
 class UserPasswordUpdate(UpdateAPIView):
