@@ -286,6 +286,30 @@ document.addEventListener("DOMContentLoaded", function() {
       summary_more_info.innerHTML = form.querySelector("textarea[name='more_info']").value
     }
 
+    validateFirstStep() {
+      let checked_categories = this.getCheckedCategories()
+      if (checked_categories.length === 0) {
+        alert('Musisz zaznaczyć przynajmniej jedną kategorię!');
+        return false
+      }
+    }
+
+    validateForm() {
+
+      let result = true;
+
+      // 1. step
+      switch (this.currentStep) {
+        case 1: {
+          result = this.validateFirstStep();
+          break;
+        }
+      }
+
+      return result
+
+    }
+
     /**
      * Update form front-end
      * Show next or previous section etc.
@@ -294,6 +318,7 @@ document.addEventListener("DOMContentLoaded", function() {
       this.$step.innerText = this.currentStep;
 
       // TODO: Validation
+
 
       this.slides.forEach(slide => {
         slide.classList.remove("active");
