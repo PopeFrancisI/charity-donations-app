@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block slogan %}
+
+    <div class="container--90 container slogan">
+        <div id="settings" class="slogan--item">
+            <h1>
+                Ustawienia
+            </h1>
+        </div>
+    </div>
+
+{% endblock %}
+
+
+{% block content %}
+
+    <div class="container container--90">
+        <div id="profile-settings" class="">
+            <h1>
+                Zmiana danych
+            </h1>
+
+            <form id="user-data-form" class="" style="display: block">
+                {{ form.as_p }}
+                <p>
+                    <label for="password">Potwierdź hasłem:</label>
+                    <input id="password" name="password" type="password" required="">
+                    <input id="save-button" type="submit" value="Zapisz">
+                </p>
+            </form>
+
+            <br>
+            <hr>
+
+            <h1>
+                Zmiana hasła
+            </h1>
+
+            <form id="user-password-form" class="" style="display: block">
+                {% csrf_token %}
+
+                <p>
+                    <label for="old-password">Stare hasło:</label>
+                    <input id="old-password" name="old-password" type="password">
+                </p>
+
+                <p>
+                    <label for="new-password1">Nowe hasło:</label>
+                    <input id="new-password1" name="new-password1" type="password">
+                </p>
+
+                <p>
+                    <label for="new-password2">Powtórz nowe hasło:</label>
+                    <input id="new-password2" name="new-password2" type="password">
+
+                    <input id="change-password-button" type="submit" value="Zmień hasło">
+                </p>
+
+            </form>
+        </div>
+    </div>
+
+{% endblock %}

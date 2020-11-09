@@ -1,18 +1,25 @@
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.hashers import check_password
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
+from django.contrib.auth.password_validation import validate_password, password_changed
+from django.core.exceptions import ValidationError
 from django.core.paginator import Paginator
+from django.core.validators import validate_email, MinLengthValidator
+from django.forms import ModelForm
 from django.shortcuts import render, redirect
 from django.urls import reverse, reverse_lazy
 from django.views import View
 from django.db.models import Sum
-from django.views.generic import FormView
+from django.views.generic import FormView, UpdateView
 from rest_framework.generics import UpdateAPIView
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.serializers import Serializer
 
-from donations.forms import RegisterForm
+from donations.forms import RegisterForm, UserProfileEditForm, is_alpha_validator
 from donations.models import Donation, Institution, Category
-from donations.serializers import DonationSerializer
+from donations.serializers import DonationSerializer, UserProfileSerializer, UserPasswordSerializer
 
 
 class LandingPage(View):
@@ -176,3 +183,86 @@ class DonationUpdate(UpdateAPIView):
         IsAuthenticated
     ]
     serializer_class = DonationSerializer
+
+
+class UserProfileEdit(LoginRequiredMixin, FormView):
+    form_class = UserProfileEditForm
+    template_name = 'user_profile_edit.html'
+    success_url = reverse_lazy('user_profile')
+
+    def get_object(self, queryset=None):
+        return self.request.user
+
+    def get_form(self, form_class=None):
+        form: ModelForm
+        user = self.request.user
+        form = super().get_form(form_class)
+        form.fields['username'].help_text = ''
+        form.fields['username'].initial = user.username
+        form.fields['first_name'].initial = user.first_name
+        form.fields['last_name'].initial = user.last_name
+        return form
+
+
+class UserProfileUpdate(UpdateAPIView):
+    queryset = User.objects.all()
+    permission_classes = [
+        IsAuthenticated
+    ]
+    serializer_class = UserProfileSerializer
+
+    def get_object(self):
+        return self.request.user
+
+    def update(self, request, *args, **kwargs):
+        try:
+            self.validate_profile_data(request.data)
+            return super().update(request, args, kwargs)
+        except ValidationError:
+            return Response(status=500)
+
+    def validate_profile_data(self, data):
+        if not check_password(data['password'], self.request.user.password):
+            raise ValidationError('Incorrect password.')
+        if not data['username'] or not data['first_name'] or not data['last_name']:
+            raise ValidationError('No blank fields allowed.')
+        validate_email(data['username'])
+        is_alpha_validator(data['first_name'])
+        is_alpha_validator(data['last_name'])
+
+
+class UserPasswordUpdate(UpdateAPIView):
+    queryset = User.objects.all()
+    permission_classes = [
+        IsAuthenticated
+    ]
+    serializer_class = UserPasswordSerializer
+
+    def get_object(self):
+        return self.request.user
+
+    def update(self, request, *args, **kwargs):
+        user = self.get_object()
+        serializer: Serializer
+        serializer = self.get_serializer(data=request.data)
+
+        if serializer.is_valid():
+            try:
+                validate_password(serializer.data.get('new_password1'))
+                validate_password(serializer.data.get('new_password2'))
+            except ValidationError:
+                return Response(status=500)
+
+            if not check_password(serializer.data.get('old_password'), self.request.user.password):
+                return Response(status=500)
+
+            user.set_password(serializer.data.get('new_password2'))
+            user.save()
+            login(request, user)
+
+            return Response({
+                'status': 'success',
+                'code': 200
+            })
+        else:
+            return Response(status=500)

@@ -3,7 +3,7 @@
         Witaj {{ request.user.first_name }}
         <ul class="dropdown">
             <li><a href="{% url 'user_profile' %}">Profil</a></li>
-            <li><a href="#">Ustawienia</a></li>
+            <li><a href="{% url 'user_profile_edit' %}#settings">Ustawienia</a></li>
             {% if request.user.is_superuser %}
                 <li><a href="admin/">Panel administracyjny</a></li>
             {% endif %}
