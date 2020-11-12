@@ -208,8 +208,10 @@ document.addEventListener("DOMContentLoaded", function() {
             this.displayFormInputData()
           }
 
-          this.currentStep++;
-          this.updateForm();
+          if (this.validateForm()) {
+            this.currentStep++;
+            this.updateForm();
+          }
         });
       });
 
@@ -254,6 +256,13 @@ document.addEventListener("DOMContentLoaded", function() {
       return checked_categories
     }
 
+    getCheckedInstitution() {
+      let institutions = form.querySelectorAll("[data-step='3'] input[name='institution']")
+      let institution_name = ''
+      institutions.forEach(e => {if(e.checked) {institution_name = e.dataset.institutionname;}})
+      return institution_name
+    }
+
     displayFormInputData(){
       let summary_bags_categories = form.querySelector(".summary #summary-bags-categories");
       let bags_count = form.querySelector("[name=bags]").value;
@@ -261,10 +270,8 @@ document.addEventListener("DOMContentLoaded", function() {
       let checked_categories_names = []
       checked_categories.forEach(e => {checked_categories_names.push(e.dataset.categoryname.toLowerCase())})
 
-      let summary_institution = form.querySelector(".summary #summary-institution-name");
-      let institutions = form.querySelectorAll("[data-step='3'] input[name='institution']")
-      let institution_name = ''
-      institutions.forEach(e => {if(e.checked) {institution_name = e.dataset.institutionname;}})
+      let institution_name = this.getCheckedInstitution()
+      let summary_institution = form.querySelector("li #summary-institution-name")
 
       summary_bags_categories.innerHTML = `${bags_count} worek/worków z przedmiotami z kategorii: ${checked_categories_names.join(", ")}.`;
       summary_institution.innerHTML = `Dla organizacji "${institution_name}".`
@@ -290,24 +297,56 @@ document.addEventListener("DOMContentLoaded", function() {
       let checked_categories = this.getCheckedCategories()
       if (checked_categories.length === 0) {
         alert('Musisz zaznaczyć przynajmniej jedną kategorię!');
-        return false
+        return false;
+      } else {
+        return true;
       }
+    }
+
+    validateSecondStep() {
+      let bags_input = form.querySelector("[name=bags]").value;
+      if (isNaN(bags_input) || bags_input === "") {
+        alert("Musisz podać prawidłową liczbę worków!");
+        return false;
+      } else {
+        return true;
+      }
+    }
+
+    validateThirdStep() {
+      let institution = this.getCheckedInstitution();
+      if (institution === null || institution === "") {
+        alert("Musisz wybrać organizację!")
+        return false
+      } else {
+        return true
+      }
+    }
+
+    validateFourthStep() {
+
     }
 
     validateForm() {
 
       let result = true;
 
-      // 1. step
       switch (this.currentStep) {
         case 1: {
           result = this.validateFirstStep();
           break;
         }
+        case 2: {
+          result = this.validateSecondStep();
+          break;
+        }
+        case 3: {
+          result = this.validateThirdStep();
+          break;
+        }
       }
 
       return result
-
     }
 
     /**
@@ -316,9 +355,6 @@ document.addEventListener("DOMContentLoaded", function() {
      */
     updateForm() {
       this.$step.innerText = this.currentStep;
-
-      // TODO: Validation
-
 
       this.slides.forEach(slide => {
         slide.classList.remove("active");
@@ -330,6 +366,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
       this.$stepInstructions[0].parentElement.parentElement.hidden = this.currentStep >= 6;
       this.$step.parentElement.hidden = this.currentStep >= 6;
+
     }
 
     /**
