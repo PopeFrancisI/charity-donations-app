@@ -27,7 +27,11 @@ class LandingPage(View):
     @staticmethod
     def count_bags():
         bags_count = Donation.objects.aggregate(Sum('quantity'))
-        return bags_count['quantity__sum']
+        bags_count = bags_count['quantity__sum']
+        if bags_count:
+            return bags_count
+        else:
+            return 0
 
     @staticmethod
     def count_supported_institutions():
