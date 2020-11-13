@@ -225,7 +225,11 @@ document.addEventListener("DOMContentLoaded", function() {
       });
 
       // Form submit
-      this.$form.querySelector("form").addEventListener("submit", e => this.submit(e));
+      this.$form.querySelector("form").addEventListener("submit", e => {
+        if(this.validateForm()){
+          this.submit(e);
+        }
+      });
     }
 
     hideInstitutions(){
@@ -293,6 +297,10 @@ document.addEventListener("DOMContentLoaded", function() {
       summary_more_info.innerHTML = form.querySelector("textarea[name='more_info']").value
     }
 
+    getAddressDateInput() {
+      return form.querySelectorAll(".form-section.form-section--columns input, textarea")
+    }
+
     validateFirstStep() {
       let checked_categories = this.getCheckedCategories()
       if (checked_categories.length === 0) {
@@ -317,14 +325,48 @@ document.addEventListener("DOMContentLoaded", function() {
       let institution = this.getCheckedInstitution();
       if (institution === null || institution === "") {
         alert("Musisz wybrać organizację!")
-        return false
+        return false;
       } else {
-        return true
+        return true;
       }
     }
 
     validateFourthStep() {
+      let inputs = this.getAddressDateInput();
+      let is_complete = true;
+      let is_postcode_ok = true;
+      let is_phone_ok = true;
+      let is_date_ok = true;
+      inputs.forEach(input => {
+        if( (input.value === "" || input.value === null) && input.name !== 'more_info' ) {
+          is_complete = false;
+        }
 
+        if(input.value !== null) {
+          if(input.name === "postcode" && !input.value.match(/^\d{2}-\d{3}/)) {
+            is_postcode_ok = false;
+          }
+
+          if(input.name === "phone" && !input.value.match(/^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{3})$/)) {
+            is_phone_ok = false;
+          }
+
+          if(input.name === "date") {
+            let input_date = new Date(input.value);
+            let today = new Date();
+            if(input_date < today) {
+              is_date_ok = false;
+            }
+          }
+        }
+      });
+
+      if(!is_complete) alert("Musisz wypełnić wymagane pola!");
+      if(!is_postcode_ok) alert("Musisz podać prawidłowy kod pocztowy!");
+      if(!is_phone_ok) alert("Musisz podać prawidłowy numer telefonu!");
+      if(!is_date_ok) alert("Musisz podać prawidłową datę!");
+
+      return is_complete && is_postcode_ok && is_phone_ok && is_date_ok;
     }
 
     validateForm() {
@@ -344,6 +386,10 @@ document.addEventListener("DOMContentLoaded", function() {
           result = this.validateThirdStep();
           break;
         }
+        case 4: {
+          result = this.validateFourthStep();
+          break;
+        }
       }
 
       return result
@@ -359,7 +405,7 @@ document.addEventListener("DOMContentLoaded", function() {
       this.slides.forEach(slide => {
         slide.classList.remove("active");
 
-        if (slide.dataset.step == this.currentStep) {
+        if (slide.dataset.step === this.currentStep) {
           slide.classList.add("active");
         }
       });
