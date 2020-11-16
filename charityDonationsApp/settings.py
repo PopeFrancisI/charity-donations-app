@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 import os
+import dj_database_url
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -20,21 +21,21 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-try:
-    from .secret_key import SECRET_KEY
-except FileNotFoundError:
-    print("""secret_key.py file not found.
-    Please, ensure secret_key.py file exists and that it contains the secret key.""")
+SECRET_KEY = os.environ['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'localhost',
+    '.herokuapp.com'
+]
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    'whitenoise.runserver_nostatic',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -47,6 +48,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -76,11 +78,9 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'charityDonationsApp.wsgi.application'
 
-try:
-    from .database_settings import DATABASES
-except FileNotFoundError:
-    print("""database_settings.py not found.
-    Please, ensure database_settings.py exists and that it contains valid database data.""")
+DATABASES = {
+    'default': dj_database_url.config(conn_max_age=600)
+}
 
 
 # Password validation
@@ -125,3 +125,6 @@ STATICFILES_DIRS = (
 )
 
 LOGIN_URL = '/login/'
+
+WHITENOISE_USE_FINDERS = True
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'

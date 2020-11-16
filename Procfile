@@ -1,0 +1,1 @@
+web: gunicorn charityDonationsApp.wsgi --log-file -
