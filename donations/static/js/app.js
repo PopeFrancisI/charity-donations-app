@@ -405,7 +405,7 @@ document.addEventListener("DOMContentLoaded", function() {
       this.slides.forEach(slide => {
         slide.classList.remove("active");
 
-        if (slide.dataset.step === this.currentStep) {
+        if (slide.dataset.step == this.currentStep) {
           slide.classList.add("active");
         }
       });
